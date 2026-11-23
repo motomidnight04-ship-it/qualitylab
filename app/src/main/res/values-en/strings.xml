@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">QualityLab</string>
+
+    <string name="main_title">Testing and Debugging</string>
+    <string name="launches_count">App launches: %1$d</string>
+    <string name="btn_order">Order (calculation)</string>
+    <string name="btn_tasks">Tasks (Room)</string>
+    <string name="btn_network">Network (posts)</string>
+    <string name="btn_crash">Crashes (demo)</string>
+    <string name="btn_leak">Memory leak (demo)</string>
+
+    <string name="title_order">Order calculation</string>
+    <string name="hint_price">Unit price</string>
+    <string name="hint_quantity">Quantity</string>
+    <string name="hint_discount">Discount, % (optional)</string>
+    <string name="btn_calculate">Calculate</string>
+    <string name="btn_details">Details</string>
+    <string name="result_total">Total: %1$s</string>
+    <string name="err_price_empty">Enter the price</string>
+    <string name="err_price_invalid">Price must be from 0.01 to 1,000,000</string>
+    <string name="err_qty_empty">Enter the quantity</string>
+    <string name="err_qty_invalid">Quantity must be a whole number from 1 to 1000</string>
+    <string name="err_discount_invalid">Discount must be a number from 0 to 100</string>
+
+    <string name="title_result">Result</string>
+    <string name="result_details">Quantity: %1$d</string>
+    <string name="btn_back">Back</string>
+
+    <string name="title_tasks">Tasks</string>
+    <string name="hint_task">New task</string>
+    <string name="btn_add">Add</string>
+    <string name="btn_seed">+50 demo</string>
+    <string name="btn_clear_done">Delete completed</string>
+    <string name="err_task_empty">Enter a title</string>
+    <string name="err_task_too_long">At most 100 characters</string>
+
+    <string name="title_network">Posts from network</string>
+    <string name="btn_load">Load</string>
+    <string name="status_idle">Press “Load”</string>
+    <string name="status_loading">Loading…</string>
+    <string name="status_ok">Posts loaded: %1$d</string>
+    <string name="status_error">Error: %1$s</string>
+
+    <string name="title_crash">Crash demo</string>
+    <string name="cb_fixed">Fixed version</string>
+    <string name="btn_npe">NullPointerException</string>
+    <string name="btn_ioobe">IndexOutOfBounds</string>
+    <string name="btn_network_main">NetworkOnMainThread</string>
+    <string name="toast_ok">Safe: no error</string>
+
+    <string name="title_leak">Memory leak</string>
+    <string name="leak_hint">Open this screen and go back. After a few seconds LeakCanary will show a leak notification.</string>
+</resources>

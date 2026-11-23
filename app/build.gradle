@@ -1,0 +1,140 @@
+plugins {
+    id 'com.android.application'
+    id 'jacoco'
+}
+
+android {
+    namespace 'com.example.qualitylab'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.example.qualitylab'
+        minSdk 24
+        targetSdk 35
+        versionCode 1
+        versionName '1.0'
+
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        // Orchestrator очищает данные приложения перед каждым тестом (Задание 10)
+        testInstrumentationRunnerArguments = [clearPackageData: 'true']
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    buildTypes {
+        debug {
+            // Покрытие кода (Задание 12)
+            enableUnitTestCoverage true
+            enableAndroidTestCoverage true
+        }
+        release {
+            // R8 вырезает Log.d/i/v в release (Задание 1), см. proguard-rules.pro
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        // Сборка для Macrobenchmark (Задание 14)
+        benchmark {
+            initWith buildTypes.release
+            signingConfig signingConfigs.debug
+            matchingFallbacks = ['release']
+            debuggable false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    testOptions {
+        animationsDisabled = true                      // Задание 10: отключить анимации
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'         // Задание 10: Test Orchestrator
+        unitTests {
+            includeAndroidResources = true             // нужно для Robolectric
+            returnDefaultValues = true
+            all {
+                jacoco {
+                    includeNoLocationClasses = true
+                    excludes = ['jdk.internal.*']
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.8.7'
+    implementation 'androidx.lifecycle:lifecycle-livedata:2.8.7'
+
+    implementation 'androidx.room:room-runtime:2.6.1'
+    annotationProcessor 'androidx.room:room-compiler:2.6.1'
+
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.google.code.gson:gson:2.11.0'
+    implementation 'androidx.test.espresso:espresso-idling-resource:3.6.1'
+
+    // Задание 13: поиск утечек памяти (только debug)
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
+
+    // Unit-тесты (JVM)
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:5.14.2'
+    testImplementation 'androidx.arch.core:core-testing:2.2.0'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
+    testImplementation 'org.robolectric:robolectric:4.14.1'
+    testImplementation 'androidx.test:core:1.6.1'
+    testImplementation 'androidx.test.ext:junit:1.2.1'
+
+    // Instrumented / UI-тесты
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test:rules:1.6.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.6.1'
+    androidTestUtil 'androidx.test:orchestrator:1.5.1'
+}
+
+// ---------- Задание 12: JaCoCo ----------
+def buildDirFile = layout.buildDirectory.get().asFile
+def jacocoExcludes = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*',
+                      '**/*_Impl*.*', '**/databinding/**']
+def debugClasses = fileTree(dir: "$buildDirFile/intermediates/javac/debug/compileDebugJavaWithJavac/classes",
+        excludes: jacocoExcludes)
+def execFiles = fileTree(dir: buildDirFile, includes: [
+        'jacoco/testDebugUnitTest.exec',
+        'outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec',
+        'outputs/code_coverage/debugAndroidTest/connected/**/*.ec'])
+
+tasks.register('jacocoTestReport', JacocoReport) {
+    group = 'verification'
+    description = 'HTML/XML отчёт покрытия (unit + instrumented, если запускались)'
+    dependsOn 'testDebugUnitTest'
+    reports {
+        html.required = true
+        xml.required = true
+    }
+    classDirectories.setFrom(debugClasses)
+    sourceDirectories.setFrom(files('src/main/java'))
+    executionData.setFrom(execFiles)
+}
+
+tasks.register('jacocoLogicVerification', JacocoCoverageVerification) {
+    group = 'verification'
+    description = 'Проверка: покрытие слоя бизнес-логики (пакет logic) не меньше 70%'
+    dependsOn 'jacocoTestReport'
+    classDirectories.setFrom(fileTree(dir: "$buildDirFile/intermediates/javac/debug/compileDebugJavaWithJavac/classes",
+            includes: ['**/logic/**'], excludes: jacocoExcludes))
+    executionData.setFrom(execFiles)
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.70
+            }
+        }
+    }
+}

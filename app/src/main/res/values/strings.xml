@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">QualityLab</string>
+
+    <string name="main_title">Тестирование и отладка</string>
+    <string name="launches_count">Запусков приложения: %1$d</string>
+    <string name="btn_order">Заказ (расчёт)</string>
+    <string name="btn_tasks">Задачи (Room)</string>
+    <string name="btn_network">Сеть (посты)</string>
+    <string name="btn_crash">Крэши (демо)</string>
+    <string name="btn_leak">Утечка памяти (демо)</string>
+
+    <string name="title_order">Расчёт заказа</string>
+    <string name="hint_price">Цена за единицу</string>
+    <string name="hint_quantity">Количество</string>
+    <string name="hint_discount">Скидка, % (необязательно)</string>
+    <string name="btn_calculate">Рассчитать</string>
+    <string name="btn_details">Подробнее</string>
+    <string name="result_total">Итого: %1$s</string>
+    <string name="err_price_empty">Введите цену</string>
+    <string name="err_price_invalid">Цена должна быть от 0.01 до 1 000 000</string>
+    <string name="err_qty_empty">Введите количество</string>
+    <string name="err_qty_invalid">Количество — целое число от 1 до 1000</string>
+    <string name="err_discount_invalid">Скидка — число от 0 до 100</string>
+
+    <string name="title_result">Результат</string>
+    <string name="result_details">Количество: %1$d</string>
+    <string name="btn_back">Назад</string>
+
+    <string name="title_tasks">Задачи</string>
+    <string name="hint_task">Новая задача</string>
+    <string name="btn_add">Добавить</string>
+    <string name="btn_seed">+50 демо</string>
+    <string name="btn_clear_done">Удалить выполненные</string>
+    <string name="err_task_empty">Введите название</string>
+    <string name="err_task_too_long">Не более 100 символов</string>
+
+    <string name="title_network">Посты из сети</string>
+    <string name="btn_load">Загрузить</string>
+    <string name="status_idle">Нажмите «Загрузить»</string>
+    <string name="status_loading">Загрузка…</string>
+    <string name="status_ok">Загружено постов: %1$d</string>
+    <string name="status_error">Ошибка: %1$s</string>
+
+    <string name="title_crash">Демо крэшей</string>
+    <string name="cb_fixed">Исправленная версия</string>
+    <string name="btn_npe">NullPointerException</string>
+    <string name="btn_ioobe">IndexOutOfBounds</string>
+    <string name="btn_network_main">NetworkOnMainThread</string>
+    <string name="toast_ok">Безопасно: ошибки нет</string>
+
+    <string name="title_leak">Утечка памяти</string>
+    <string name="leak_hint">Откройте этот экран и вернитесь назад. Через несколько секунд LeakCanary покажет уведомление об утечке.</string>
+</resources>
